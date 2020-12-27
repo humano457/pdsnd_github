@@ -225,10 +225,11 @@ def trip_duration_stats(df):
         print('-'*40)
 
 
-def user_stats(df):
+def user_stats(df,city):
     """Displays statistics on bikeshare users.
     Args:
         df - filtered data frame
+        city - city number
     """
 
     display_stats_request = str(input("Would you like to display user-based statistics? Type Y for yes or any other key for no\n"))
@@ -241,23 +242,23 @@ def user_stats(df):
         user_type_count = df['User Type'].value_counts().to_string()
         print("User types counts:\n", user_type_count)
 
-        # Display counts of gender if the data is present in the dataset (i.e. NYC or Chicago)
-        try:
+        # if city is Washington, it is not possible to calculate gender or age statistics so no need to use value_count function
+        if city != 3:
+
+            # Display counts of gender if the data is present in the dataset (i.e. NYC or Chicago)
             gender_count = df['Gender'].value_counts().to_string()
             print("User gender counts:\n", gender_count)
-        except KeyError:
-            print("Cannot generate gender counts. This city does not collect user gender data")
-
-        # Display earliest, most recent, and most common year of birth if the data is present in the dataset (i.e. NYC or Chicago)
-        try:
+            
+            # Display earliest, most recent, and most common year of birth if the data is present in the dataset (i.e. NYC or Chicago)
             earliest_year_of_birth = str(int(df['Birth Year'].min()))
             most_recent_year_of_birth = str(int(df['Birth Year'].max()))
             most_common_year_of_birth = str(int(df['Birth Year'].mode()[0]))
             print("Based on your filter selections, the oldest user was born in {}, the youngest user was born in {}, and the most common year of birth is " 
-                "{}\n" .format(earliest_year_of_birth,most_recent_year_of_birth,most_common_year_of_birth))
-        except KeyError:
-            print("Cannot generate user age statistics. This city does not collect user age data")
+                    "{}\n" .format(earliest_year_of_birth,most_recent_year_of_birth,most_common_year_of_birth))
+        else:
+            print("Cannot generate user age statistics. This city does not collect user gender or age data\n")
 
+        # display calculation time in milliseconds for better user readability
         print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
@@ -270,7 +271,7 @@ def main():
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
-        user_stats(df)
+        user_stats(df,city)
 
         restart = input('\nWould you like to restart? Enter Y for yes or any other key for no.\n')
         if restart.upper() != 'Y':
