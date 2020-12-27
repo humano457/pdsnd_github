@@ -165,7 +165,7 @@ def time_stats(df):
         most_common_hour_formatted = time.gmtime(most_common_hour*3600)
         print('Based on your filter selections, the most common start hour is', time.strftime("%H:%M:%S",most_common_hour_formatted))
 
-        print("\nCalculations completed in %s seconds." % (time.time() - start_time))
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 
@@ -194,7 +194,7 @@ def station_stats(df):
         most_common_station_combo = str(df['Start-End Combo'].mode()[0])
         print("Based on your filter selections, the most common start-end station pair is: {}\n" .format(most_common_station_combo))
         
-        print("Calculations completed in %s seconds.\n" % (time.time() - start_time))
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 
@@ -221,7 +221,7 @@ def trip_duration_stats(df):
         mean_travel_time_formatted = time.gmtime(mean_travel_time)
         print("Based on your filter selections, the mean travel time in hours, minutes, and seconds is: ", time.strftime("%H:%M:%S",mean_travel_time_formatted))
 
-        print("\nCalculations completed in %s seconds.\n" % (time.time() - start_time))
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 
@@ -258,7 +258,7 @@ def user_stats(df):
         except KeyError:
             print("Cannot generate user age statistics. This city does not collect user age data")
 
-        print("This took %s seconds." % (time.time() - start_time))
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 def main():
