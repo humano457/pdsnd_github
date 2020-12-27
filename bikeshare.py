@@ -165,7 +165,7 @@ def time_stats(df):
         most_common_hour_formatted = time.gmtime(most_common_hour*3600)
         print('Based on your filter selections, the most common start hour is', time.strftime("%H:%M:%S",most_common_hour_formatted))
 
-        print("\nCalculations completed in %s seconds." % (time.time() - start_time))
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 
@@ -194,7 +194,7 @@ def station_stats(df):
         most_common_station_combo = str(df['Start-End Combo'].mode()[0])
         print("Based on your filter selections, the most common start-end station pair is: {}\n" .format(most_common_station_combo))
         
-        print("Calculations completed in %s seconds.\n" % (time.time() - start_time))
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 
@@ -221,14 +221,15 @@ def trip_duration_stats(df):
         mean_travel_time_formatted = time.gmtime(mean_travel_time)
         print("Based on your filter selections, the mean travel time in hours, minutes, and seconds is: ", time.strftime("%H:%M:%S",mean_travel_time_formatted))
 
-        print("\nCalculations completed in %s seconds.\n" % (time.time() - start_time))
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 
-def user_stats(df):
+def user_stats(df,city):
     """Displays statistics on bikeshare users.
     Args:
         df - filtered data frame
+        city - city number
     """
 
     display_stats_request = str(input("Would you like to display user-based statistics? Type Y for yes or any other key for no\n"))
@@ -241,24 +242,24 @@ def user_stats(df):
         user_type_count = df['User Type'].value_counts().to_string()
         print("User types counts:\n", user_type_count)
 
-        # Display counts of gender if the data is present in the dataset (i.e. NYC or Chicago)
-        try:
+        # if city is Washington, it is not possible to calculate gender or age statistics so no need to use value_count function
+        if city != 3:
+
+            # Display counts of gender if the data is present in the dataset (i.e. NYC or Chicago)
             gender_count = df['Gender'].value_counts().to_string()
             print("User gender counts:\n", gender_count)
-        except KeyError:
-            print("Cannot generate gender counts. This city does not collect user gender data")
-
-        # Display earliest, most recent, and most common year of birth if the data is present in the dataset (i.e. NYC or Chicago)
-        try:
+            
+            # Display earliest, most recent, and most common year of birth if the data is present in the dataset (i.e. NYC or Chicago)
             earliest_year_of_birth = str(int(df['Birth Year'].min()))
             most_recent_year_of_birth = str(int(df['Birth Year'].max()))
             most_common_year_of_birth = str(int(df['Birth Year'].mode()[0]))
             print("Based on your filter selections, the oldest user was born in {}, the youngest user was born in {}, and the most common year of birth is " 
-                "{}\n" .format(earliest_year_of_birth,most_recent_year_of_birth,most_common_year_of_birth))
-        except KeyError:
-            print("Cannot generate user age statistics. This city does not collect user age data")
+                    "{}\n" .format(earliest_year_of_birth,most_recent_year_of_birth,most_common_year_of_birth))
+        else:
+            print("Cannot generate user age statistics. This city does not collect user gender or age data\n")
 
-        print("This took %s seconds." % (time.time() - start_time))
+        # display calculation time in milliseconds for better user readability
+        print("Calculations completed in %5.3f milliseconds.\n" % ((time.time() - start_time)*1000))
         print('-'*40)
 
 def main():
@@ -271,7 +272,7 @@ def main():
         time_stats(df)
         station_stats(df)
         trip_duration_stats(df)
-        user_stats(df)
+        user_stats(df,city)
 
         restart = input('\nWould you like to restart? Enter Y for yes or any other key for no.\n')
         if restart.upper() != 'Y':
