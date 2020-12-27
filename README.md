@@ -25,3 +25,5 @@ The script uses pandas, numpy, and time libraries.
 Script now shows time required for calculations in milliseconds. Script has been optimized to avoid unnecesary statistical calculations if data is not available in the dataset, i.e. selected city is Washington
 
 ### Future scope
+
+Allow user to filter by both month and weekday
