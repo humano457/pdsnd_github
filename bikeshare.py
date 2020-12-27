@@ -262,6 +262,7 @@ def user_stats(df):
         print('-'*40)
 
 def main():
+    #Code runs continuously until user does not want to restart anymore
     while True:
         city, month, day, filter_sel = get_filters()
         df = load_data(city, month, day, filter_sel)
